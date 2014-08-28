@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile("com.sun.jersey:jersey-client:1.18.1")
+  compile("commons-io:commons-io:2.3")
+}
+
+configurations {
+  provided
+  // do not activate this line (breakes moduledependencies in Intellij IDEA)
+  // provided.extendsFrom(compile)
+}
+
+idea {
+  module {
+    scopes.PROVIDED.plus += configurations.provided
+  }
+  project {
+    jdkName = '1.7'
+    languageLevel = '1.7'
+  }
+}
+
+sourceSets {
+  main {
+    compileClasspath += configurations.provided
+  }
+  test {
+    compileClasspath += configurations.provided
+    runtimeClasspath += configurations.provided
+  }
+}
+
